@@ -96,7 +96,19 @@ input_vals = {}
 cols = st.columns(max(1, min(4, len(features))))
 for i, feat in enumerate(features):
     col = cols[i % len(cols)]
-    input_vals[feat] = col.number_input(feat, value=float(default_values[feat]))
+    if feat in ["JHM", "R55"]:
+        # Radio buttons for binary features
+        val = col.radio(
+            f"{feat} (Yes/No)", 
+            options=["No", "Yes"],
+            horizontal=True,
+            key=f"radio_{feat}"
+        )
+        # Convert Yes/No to 1/0 for the model
+        input_vals[feat] = 1.0 if val == "Yes" else 0.0
+    else:
+        # Regular number input for other features
+        input_vals[feat] = col.number_input(feat, value=float(default_values[feat]))
 
 predict_btn = st.button("Predict")
 if predict_btn:
