@@ -15,7 +15,8 @@ st.markdown(
     How to use:
     1) Post initial NaOH addition, note amount added and pH
     2) Enter numeric values for each feature below.
-    3) Click Predict to see the model's output.
+    3) pH Required for JHM: 8.5, R55:8.9 
+    4) Click Predict to see the model's output.
 
 
     """
