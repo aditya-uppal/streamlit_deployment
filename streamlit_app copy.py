@@ -10,15 +10,10 @@ st.title("Saponification Twin")
 
 st.markdown(
     """
-    This app loads a local pretrained model `LR_model_2.pkl` placed next to this file
-    and provides a simple interface to enter feature values and get a prediction.
-
     How to use:
-    1) Place `LR_model_2.pkl` in the same folder as this app file.
+    1) Post initial NaOH addition, note amount added and pH
     2) Enter numeric values for each feature below.
     3) Click Predict to see the model's output.
-
-    Note: the app purposely hides model internals and coefficients.
     """
 )
 
