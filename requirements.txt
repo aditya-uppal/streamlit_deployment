@@ -1,0 +1,14 @@
+# requirements inferred from project imports (generated 2025-11-07)
+# Primary runtime: streamlit app using scikit-learn for modeling, pandas/numpy for data,
+# matplotlib for plotting. scipy is included because scikit-learn's GaussianProcess
+# and other internals depend on it.
+streamlit>=1.0
+scikit-learn>=1.0
+pandas>=1.0
+numpy>=1.21
+matplotlib>=3.0
+scipy>=1.7
+
+# Notes:
+# - The project uses only the standard library for file I/O/pickling (no extra packages).
+# - If you want exact versions from your environment, run `pip freeze > requirements.txt`.
