@@ -3,23 +3,27 @@ import pandas as pd
 import numpy as np
 import pickle
 from pathlib import Path
+import ast
 
 
 st.set_page_config(layout="wide")
-st.title("Saponification Twin")
+st.title("Saponification pH Correction Twin")
 
 st.markdown(
     """
+    
     How to use:
     1) Post initial NaOH addition, note amount added and pH
     2) Enter numeric values for each feature below.
     3) Click Predict to see the model's output.
+
+
     """
 )
 
 
 # Expected model filename (placed alongside this app file)
-MODEL_NAME = "LR_model_2.pkl"
+MODEL_NAME = "LR_model_3.pkl"
 BASE = Path(__file__).resolve().parent
 MODEL_PATH = BASE / MODEL_NAME
 
@@ -39,6 +43,29 @@ except Exception as e:
     st.sidebar.error(str(e))
     st.stop()
 
+def load_features_from_model_gen(base_dir: Path):
+    """Parse model_gen.py in base_dir and extract a top-level `cols` list if present."""
+    try:
+        mg = base_dir / "model_gen.py"
+        if not mg.exists():
+            return None
+        src = mg.read_text(encoding="utf-8")
+        tree = ast.parse(src)
+        for node in tree.body:
+            if isinstance(node, ast.Assign):
+                for t in node.targets:
+                    if isinstance(t, ast.Name) and t.id == "cols":
+                        try:
+                            val = ast.literal_eval(node.value)
+                            if isinstance(val, list) and all(isinstance(x, str) for x in val):
+                                return val
+                        except Exception:
+                            return None
+        return None
+    except Exception:
+        return None
+
+
 # If the model was saved as a dict with metadata, accept that too
 if isinstance(model, dict) and "model" in model:
     saved = model
@@ -46,17 +73,19 @@ if isinstance(model, dict) and "model" in model:
     features = saved.get("features")
 else:
     saved = None
-    # Hard-coded feature list based on model_gen.py
-    features = [
-        "Batch Size",
-        "InitialAddition",
-        "pH",
-        "Temp_1",
-        "pH.1",
-        "Temp_2",
-        "JHM",
-        "R55",
-    ]
+    # Prefer authoritative feature list from model_gen.py when possible
+    features = load_features_from_model_gen(BASE)
+    if not features:
+        # fallback hard-coded feature list
+        features = [
+            "Batch Size",
+            "InitialAddition",
+            "pH_Initial",
+            "Temp_1",
+            "pH_Required",
+            "JHM",
+            "R55",
+        ]
 
 
 st.markdown("---")
