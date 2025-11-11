@@ -79,8 +79,8 @@ else:
     if not features:
         # fallback hard-coded feature list
         features = [
-            "Batch Size",
-            "InitialAddition",
+            "Batch Size (MT)",
+            "Initial Addition (kg)",
             "pH_Initial",
             "Temp_1",
             "pH_Required",
@@ -121,7 +121,7 @@ if predict_btn:
             pred_val = float(np.array(pred).ravel()[0])
         except Exception:
             pred_val = float(pred)
-        st.success(f"Predicted value: {pred_val:.4f}")
+        st.success(f"Predicted value (kg): {pred_val:.4f}")
     except Exception as e:
         st.error(f"Prediction failed: {e}")
 
